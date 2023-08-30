@@ -1,5 +1,7 @@
 package br.com.next.desafio.spring.services;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -26,13 +28,44 @@ public class ClientServices {
            throw new GeneralException("client is already registered", HttpStatus.CONFLICT);
         }, () -> {
     		Client entity = new Client();
-    		BeanUtils.copyProperties(request, entity);
+    		BeanUtils.copyProperties(request, entity); 
     		repository.save(entity);
         }); 
 		
 		return GenericResponseDTO.builder().message("Client created").status(201).build();
 	}
 	
+	public Client findClientById(String id) {
+		return repository.findById(id).orElseThrow(() -> new GeneralException("Client not found in our database", HttpStatus.NOT_FOUND));
+	}
 	
+	public List<Client> getAllClients(){
+		return repository.findAll();
+	}
 	
+	public GenericResponseDTO updateClient(String id, ClientRequestDTO request) {
+		Optional.ofNullable(repository.findById(id).orElse(null))
+		.ifPresentOrElse(client -> {
+			Client entity = repository.findById(id).orElse(null);			
+			BeanUtils.copyProperties(request, entity);		
+			entity.setUpdatedAt(LocalDateTime.now());
+			repository.save(entity);
+			
+		}, () -> {
+			throw new GeneralException("Client not found in our database", HttpStatus.NOT_FOUND);
+		});
+		
+		return GenericResponseDTO.builder().message("Client information updated").status(200).build();
+	}
+	
+	public GenericResponseDTO deleteClient(String id) {
+		Optional.ofNullable(repository.findById(id).orElse(null))
+		.ifPresentOrElse(client -> {
+			repository.deleteById(id);
+		}, () -> {
+			throw new GeneralException("Client not found in our database", HttpStatus.NOT_FOUND);
+		});
+		return GenericResponseDTO.builder().message("Client deleted").status(200).build();
+	}
 }
+
