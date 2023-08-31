@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.UuidGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import br.com.next.desafio.spring.enums.InsuranceAnalysis;
 import br.com.next.desafio.spring.enums.InsuranceType;
 import jakarta.persistence.Column;
@@ -47,7 +49,9 @@ public class Insurance {
 	
 	@Column(name="validated_at", nullable = false, updatable = false)
 	private LocalDateTime validatedAt;
-
+	
+	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="client_id") 
 	//USADO PRA ESTABELECER RELAÇÕES ENTRE DUAS ENTIDADES DO BANCO DE DADOS

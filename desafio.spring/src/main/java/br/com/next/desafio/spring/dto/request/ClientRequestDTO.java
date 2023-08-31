@@ -6,11 +6,12 @@ import lombok.Data;
 @Data
 public class ClientRequestDTO {
 	
-
     private String name;
     private String socialSecurity;
     private Integer age;
     private Integer dependents;
     private Double income;
     private MaritalStatus maritalStatus;
+    
+    
 }

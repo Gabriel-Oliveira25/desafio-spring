@@ -2,6 +2,8 @@ package br.com.next.desafio.spring.entities;
 
 import org.hibernate.annotations.UuidGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -36,7 +38,12 @@ public class Vehicle {
 	@Column(name="year", nullable=false, updatable=false)
 	private Integer year;
 	
+	@Column(name="plate_number", nullable=false, unique=true)
+	private String plateNumber;
+	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="client_id") 
+	//USADO PRA ESTABELECER RELAÇÕES ENTRE DUAS ENTIDADES DO BANCO DE DADOS
 	private Client client;
 }
