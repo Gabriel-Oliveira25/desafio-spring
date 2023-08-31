@@ -1,6 +1,7 @@
 package br.com.next.desafio.spring.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 import org.hibernate.annotations.UuidGenerator;
@@ -58,10 +59,11 @@ public class Client {
 	@Column(name="updated_at")
 	private LocalDateTime updatedAt;
 	
+	
 	@OneToMany(mappedBy="client", cascade=CascadeType.ALL, fetch=FetchType.LAZY, orphanRemoval=true) //mappedBy= INDICA O OBJETO QUE ESTÁ FAZENDO A RELAÇÃO ENTRE AS DUAS CLASSES
 	//fetch = define por padrão que o relacionamento dos objetos seja feito de uma maneira "preguiçosa", sendo assim, os dados das casas do cliente só são "vistos" se você der um get clientHouses. 
 	//orphanRemovel = caso seja removido da coleção, remove automaticamente do banco de dados
-	private Set<House> clientHouses;
+	private List<House> clientHouses;
 	
 	@OneToMany(mappedBy="client", cascade=CascadeType.ALL, fetch=FetchType.LAZY, orphanRemoval=true)
 	private Set<Vehicle> clientVehicle;

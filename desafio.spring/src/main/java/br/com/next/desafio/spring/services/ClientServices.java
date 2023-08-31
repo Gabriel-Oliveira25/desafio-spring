@@ -25,7 +25,7 @@ public class ClientServices {
 	public GenericResponseDTO createClient(ClientRequestDTO request){
 		Optional.ofNullable(repository.findBySocialSecurity(request.getSocialSecurity()))
         .ifPresentOrElse(client -> {
-           throw new GeneralException("client is already registered", HttpStatus.CONFLICT);
+           throw new GeneralException("client is already registered in our database", HttpStatus.CONFLICT);
         }, () -> {
     		Client entity = new Client();
     		BeanUtils.copyProperties(request, entity); 
