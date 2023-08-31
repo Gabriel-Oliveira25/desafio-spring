@@ -20,24 +20,27 @@ public class HouseServices {
 
 	private final HouseRepository repository;
 
-	
-	//BUGGED -> GET TO IT TOMORROW
-	public List<House> listByZipcode(String zipcode){
-		return repository.findByZipcode(zipcode);
-	}
+    public List<House> listAll(Optional<String> zipcode) {
+        if (!zipcode.isPresent()){
+            return repository.findAll();
+        } else {
+            return repository.findByZipcode(zipcode.get());
+        }
+    }
 	
 	public GenericResponseDTO createHouse(HouseRequestDTO request) {
 		House entity = new House();
 		BeanUtils.copyProperties(request, entity);
-		repository.save(entity);
+		this.repository.save(entity);
 		return GenericResponseDTO.builder().message("House created").status(201).build();
 	}
 
 	public GenericResponseDTO updateOwnershipStatus(String id, HouseRequestDTO request) {
-		Optional.ofNullable(repository.findById(id).orElse(null)).ifPresentOrElse(house -> {
-			House entity = repository.findById(id).orElse(null);
+		Optional.ofNullable(this.repository.findById(id).orElse(null))
+		.ifPresentOrElse(house -> {
+			House entity = this.repository.findById(id).orElse(null);
 			BeanUtils.copyProperties(request, entity);
-			repository.save(entity);
+			this.repository.save(entity);
 		}, () -> {
 			throw new GeneralException("House not found in our database", HttpStatus.NOT_FOUND);
 		});
@@ -47,7 +50,7 @@ public class HouseServices {
 
 	public GenericResponseDTO deleteHouse(String id) {
 		Optional.ofNullable(repository.findById(id).orElse(null)).ifPresentOrElse(house -> {
-			repository.deleteById(id);
+			this.repository.deleteById(id);
 		}, () -> {
 			throw new GeneralException("Client not found in our database", HttpStatus.NOT_FOUND);
 		});
